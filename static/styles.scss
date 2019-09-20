@@ -1,19 +1,76 @@
 $white: #F3F3F3;
 $base-color: #ffc370;
-$secondary-color: #131211;
+$secondary-color: #161514;
 $tertiary-color: #4a3d31;
 
-%font-shared {
+%primary-font {
     color: $base-color;
-    background-color: $secondary-color;
-    font-family: "Open Sans", sans-serif;
-    text-align: center;
+    font-family: "Playfair Display", serif;
+    a {
+        &:link, &:visited {
+            color: $base-color;
+        }
+    }
+}
+
+%secondary-font {
+    color: $white;
+    font-family: "Lato", sans-serif;;
+    a {
+        &:link, &:visited {
+            color: $white;
+        }
+    }
+}
+
+nav.navbar {
+    @extend %primary-font;
+    background-color: black;
+    font-weight: bold;
+    .navbar-toggler {
+        border-color: $base-color;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,195,112, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    }
 }
 
 body {
-    padding-top: 5rem !important;
     background-color: $tertiary_color;
-    p {
-        @extend %font-shared;
+}
+
+main {
+    padding-top: 5rem !important;
+    .custom-container {
+        background-color: $secondary-color;
+        padding: 1.5rem;
     }
 }
+
+form {
+    label {
+        @extend %primary-font;
+    }
+    input {
+        @extend %secondary-font;
+    }
+}
+
+.btn {
+    color: $secondary-color;
+    background-color: $base-color;
+    font-family: "Playfair Display", serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @extend %primary-font;
+    text-align: center;
+}
+
+p {
+    @extend %secondary-font;
+    background-color: $secondary-color;
+    text-align: center;
+}
+

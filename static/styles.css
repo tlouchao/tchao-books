@@ -1,13 +1,55 @@
-body p {
+h1, h2, h3, h4, h5, h6, form label, nav.navbar {
   color: #ffc370;
-  background-color: #131211;
-  font-family: "Open Sans", sans-serif;
-  text-align: center;
+  font-family: "Playfair Display", serif;
+}
+h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link, form label a:link, nav.navbar a:link, h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited, form label a:visited, nav.navbar a:visited {
+  color: #ffc370;
+}
+
+p, form input {
+  color: #F3F3F3;
+  font-family: "Lato", sans-serif;
+}
+p a:link, form input a:link, p a:visited, form input a:visited {
+  color: #F3F3F3;
+}
+
+nav.navbar {
+  background-color: black;
+  font-weight: bold;
+}
+nav.navbar .navbar-toggler {
+  border-color: #ffc370;
+}
+nav.navbar .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,195,112, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
 body {
-  padding-top: 5rem !important;
   background-color: #4a3d31;
+}
+
+main {
+  padding-top: 5rem !important;
+}
+main .custom-container {
+  background-color: #161514;
+  padding: 1.5rem;
+}
+
+.btn {
+  color: #161514;
+  background-color: #ffc370;
+  font-family: "Playfair Display", serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+
+p {
+  background-color: #161514;
+  text-align: center;
 }
 
 /*# sourceMappingURL=styles.css.map */
