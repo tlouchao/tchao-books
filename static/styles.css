@@ -1,0 +1,13 @@
+body p {
+  color: #ffc370;
+  background-color: #131211;
+  font-family: "Open Sans", sans-serif;
+  text-align: center;
+}
+
+body {
+  padding-top: 5rem !important;
+  background-color: #4a3d31;
+}
+
+/*# sourceMappingURL=styles.css.map */

@@ -1,0 +1,19 @@
+$white: #F3F3F3;
+$base-color: #ffc370;
+$secondary-color: #131211;
+$tertiary-color: #4a3d31;
+
+%font-shared {
+    color: $base-color;
+    background-color: $secondary-color;
+    font-family: "Open Sans", sans-serif;
+    text-align: center;
+}
+
+body {
+    padding-top: 5rem !important;
+    background-color: $tertiary_color;
+    p {
+        @extend %font-shared;
+    }
+}
