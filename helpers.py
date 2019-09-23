@@ -1,6 +1,11 @@
-from flask import redirect, session
+from flask import redirect, render_template, session
 from functools import wraps
 
+
+
+# Error handler
+def error(description, code):
+    return render_template("error.html", description= description, code=code)
 
 # Login decorator
 def login_required(f):
