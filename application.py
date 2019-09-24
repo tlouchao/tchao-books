@@ -41,7 +41,12 @@ db = scoped_session(sessionmaker(bind=engine))
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    return render_template("index.html")
+    # Query database for user
+    # Assume that one entry is returned, since username is unique
+    statement = text("SELECT * FROM users WHERE id = :id")
+    statement = statement.bindparams(id=session["user_id"])
+    result = db.execute(statement).first()
+    return render_template("index.html", username=result["username"])
 
 @app.route("/search", methods=["GET", "POST"])
 @login_required
@@ -58,7 +63,7 @@ def review():
 def logout():
 
     # Forget any user_id
-    session['user_id'] = None
+    session["user_id"] = None
 
     return redirect('/login')
 
@@ -66,7 +71,7 @@ def logout():
 def login():
 
     # Forget any user_id
-    session['user_id'] = None
+    session["user_id"] = None
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -79,14 +84,14 @@ def login():
         if not request.form.get("password"):
             return error("must provide password", 400)
 
-        # Query database for username
+        # Query database for user
         # Assume that one entry is returned, since username is unique
         statement = text("SELECT * FROM users WHERE username = :username")
         statement = statement.bindparams(username=request.form.get("username"))
         result = db.execute(statement).first()
 
         # Ensure username exists and password is correct
-        if not result or not check_password_hash(result["password"], request.form.get("password")):
+        if not result or not check_password_hash(result["hash"], request.form.get("password")):
             return error("invalid username and/or password", 403)
 
         # Remember which user has logged in
@@ -118,7 +123,7 @@ def register():
         if request.form.get("password") != request.form.get("confirmation"):
             return error("password and confirmation do not match", 400)
 
-        # Query database for username
+        # Query database for user
         # Assume that one entry is returned, since username is unique
         statement = text("SELECT * FROM users WHERE username = :username")
         statement = statement.bindparams(username=request.form.get("username"))
@@ -129,12 +134,11 @@ def register():
             return error("username is taken", 403)
         
         # Register user
-        else:
-            statement = text("INSERT INTO users(username, password) VALUES(:username, :password)")
-            statement = statement.bindparams(username=request.form.get("username"),
-                                             password=generate_password_hash(request.form.get("password")))     
-            db.execute(statement)
-            db.commit()
+        statement = text("INSERT INTO users(username, hash) VALUES(:username, :hash)")
+        statement = statement.bindparams(username=request.form.get("username"),
+                                         hash=generate_password_hash(request.form.get("password")))     
+        db.execute(statement)
+        db.commit()
 
         # Redirect user to login page
         return redirect("/login")
@@ -146,7 +150,7 @@ def register():
 def errorhandler(e):
     if not isinstance(e, HTTPException):
         e = InternalServerError()
-    return render_template("error.html", description=e.name, code=e.code)
+    return error(e.name, e.code)
 
 # Listen for errors
 for code in default_exceptions:

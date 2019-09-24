@@ -22,11 +22,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-nav">
                 {% if session.user_id %}
-                    <ul class="navbar-nav mr-auto">
+                    <ul id="navbar_nav_left" class="navbar-nav mr-auto">
+                        <li id="welcome" class="navbar-text">Welcome, {{ username }}</li>
                         <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
                         <li class="nav-item"><a class="nav-link" href="/review">Review</a></li>
                     </ul>
-                    <ul class="navbar-nav ml-auto">
+                    <ul id="navbar_nav_right" class="navbar-nav ml-auto">
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                 {% else %}
@@ -35,10 +36,26 @@
                         <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                     </ul>
                 {% endif %}
-            </div>          
+            </div>    
         </nav>
         <main class="container">
             {% block main %}{% endblock %}
         </main>
+        {% if session.user_id %}
+        <script>
+            var navl = document.getElementById("navbar_nav_left");
+            var navr = document.getElementById("navbar_nav_right");
+            var welcome = document.getElementById("welcome");
+            function moveWelcome() {
+                if (window.innerWidth < 768) {
+                    navl.insertBefore(welcome, navl.childNodes[0]);
+                } else {
+                    navr.insertBefore(welcome, navr.childNodes[0]);
+                }
+            }
+            window.addEventListener("load", moveWelcome);
+            window.addEventListener("resize", moveWelcome);
+        </script>
+        {% endif %}
     </body>
 </html>
