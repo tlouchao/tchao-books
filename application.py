@@ -6,7 +6,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import error, login_required
+from helpers import create_tables, error, login_required
 
 app = Flask(__name__)
 
@@ -32,10 +32,14 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-# Set up database
+# Set up database connection
 engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 db = scoped_session(sessionmaker(bind=engine))
 
+# Create tables if not exists
+create_tables(db)
+
+# Run import.py to populate books table
 
 # Routing
 @app.route("/", methods=["GET", "POST"])
