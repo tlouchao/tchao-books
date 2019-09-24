@@ -1,16 +1,16 @@
-h1, h2, h3, h4, h5, h6, form label, nav.navbar {
+h1, h2, h3, h4, h5, h6, table th, form label, nav.navbar {
   color: #ffc370;
   font-family: "Playfair Display", serif;
 }
-h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link, form label a:link, nav.navbar a:link, h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited, form label a:visited, nav.navbar a:visited {
+h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link, table th a:link, form label a:link, nav.navbar a:link, h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited, table th a:visited, form label a:visited, nav.navbar a:visited {
   color: #ffc370;
 }
 
-p, form input {
+p, table td, form input {
   color: #F3F3F3;
   font-family: "Lato", sans-serif;
 }
-p a:link, form input a:link, p a:visited, form input a:visited {
+p a:link, table td a:link, form input a:link, p a:visited, table td a:visited, form input a:visited {
   color: #F3F3F3;
 }
 

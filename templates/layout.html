@@ -42,20 +42,21 @@
             {% block main %}{% endblock %}
         </main>
         {% if session.user_id %}
-        <script>
-            var navl = document.getElementById("navbar_nav_left");
-            var navr = document.getElementById("navbar_nav_right");
-            var welcome = document.getElementById("welcome");
-            function moveWelcome() {
-                if (window.innerWidth < 768) {
-                    navl.insertBefore(welcome, navl.childNodes[0]);
-                } else {
-                    navr.insertBefore(welcome, navr.childNodes[0]);
+            <script>
+                var navl = document.getElementById("navbar_nav_left");
+                var navr = document.getElementById("navbar_nav_right");
+                var welcome = document.getElementById("welcome");
+                function moveWelcome() {
+                    if (window.innerWidth < 768) {
+                        navl.insertBefore(welcome, navl.childNodes[0]);
+                    } else {
+                        navr.insertBefore(welcome, navr.childNodes[0]);
+                    }
                 }
-            }
-            window.addEventListener("load", moveWelcome);
-            window.addEventListener("resize", moveWelcome);
-        </script>
+                window.addEventListener("load", moveWelcome);
+                window.addEventListener("resize", moveWelcome);
+            </script>
         {% endif %}
+        {% block javascript %}{% endblock %}
     </body>
 </html>

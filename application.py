@@ -39,7 +39,7 @@ db = scoped_session(sessionmaker(bind=engine))
 # Create tables if not exists
 create_tables(db)
 
-# Run import.py to populate books table
+# NOTE: Run import.py to populate books table
 
 # Routing
 @app.route("/", methods=["GET", "POST"])
@@ -47,10 +47,46 @@ create_tables(db)
 def index():
     # Query database for user
     # Assume that one entry is returned, since username is unique
-    statement = text("SELECT * FROM users WHERE id = :id")
-    statement = statement.bindparams(id=session["user_id"])
-    result = db.execute(statement).first()
-    return render_template("index.html", username=result["username"])
+    user_statement = text("SELECT * FROM users WHERE id = :id")
+    user_statement = user_statement.bindparams(id=session["user_id"])
+    user_result = db.execute(user_statement).first()
+    if request.method == "POST":
+        # Build select statement
+        search_keys = ["isbn", "title", "author"]
+        search_like = []
+        search_params = {}
+        for k in search_keys:
+            if request.form.get(k):
+                # Match substrings
+                search_like.append("{} ILIKE :{}".format(k, k))
+                search_params[k] = "%{}%".format(request.form.get(k))
+        # No matches returned if form fields are empty
+        if not search_params:
+                return render_template("index.html", username=user_result["username"], 
+                                                     matches=0,
+                                                     items={})
+        # Execute select statement
+        search_statement = text("SELECT * FROM books WHERE " + " AND ".join(search_like))
+        search_result = db.execute(search_statement, search_params).fetchall()
+        matches = len(search_result)
+        items = {k: v[1:-1] for k, v in search_params.items()}
+        # No matches returned
+        if matches == 0:
+            return render_template("index.html", username=user_result["username"],
+                                                 matches=matches,
+                                                 items=items)
+        # Show table if matches returned
+        else:
+            headers = search_keys[:]
+            headers.append("year")
+            return render_template("index.html", username=user_result["username"],
+                                                 matches=matches,
+                                                 items=items,
+                                                 headers=headers,
+                                                 result=search_result)
+    else:
+    # User reached route via GET (as by clicking a link or via redirect)
+        return render_template("index.html", username=user_result["username"], items={})
 
 @app.route("/search", methods=["GET", "POST"])
 @login_required

@@ -60,6 +60,15 @@ form {
     }
 }
 
+table {
+    th {
+        @extend %primary-font;
+    }
+    td {
+        @extend %secondary-font;
+    }
+}
+
 .btn {
     color: $secondary-color;
     background-color: $base-color;

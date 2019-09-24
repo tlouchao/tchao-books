@@ -12,6 +12,7 @@ def create_tables(db):
         db.execute("CREATE TABLE users(id SERIAL PRIMARY KEY, " +
                                        "username VARCHAR(255) UNIQUE NOT NULL, " + 
                                        "hash VARCHAR(255) NOT NULL);")
+        db.commit()
 
     # Books table
     if not db.execute(exists, {"table_name": 'books'}).first()["exists"]:
@@ -20,6 +21,7 @@ def create_tables(db):
                                        "title VARCHAR(255) NOT NULL, " +
                                        "author VARCHAR(255) NOT NULL, " +
                                        "year INTEGER NOT NULL);")
+        db.commit()
 
     # Reviews table
     if not db.execute(exists, {"table_name": 'reviews'}).first()["exists"]:
@@ -28,7 +30,7 @@ def create_tables(db):
                                          "rating INTEGER CHECK (rating > 0 AND rating <= 5) NOT NULL, " +
                                          "description VARCHAR(1023), " + 
                                          "PRIMARY KEY (user_id, book_id));")
-    db.commit()
+        db.commit()
 
 # Error handler
 def error(description, code):
