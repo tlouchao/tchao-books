@@ -14,6 +14,12 @@ p a:link, table td a:link, form input a:link, p a:visited, table td a:visited, f
   color: #F3F3F3;
 }
 
+.review .review-rating, .book-info .book-fine, .review .review-rating p, .book-info .book-fine p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: small;
+}
+
 nav.navbar {
   background-color: black;
   font-weight: bold;
@@ -39,12 +45,6 @@ main {
   padding-bottom: 1.5rem !important;
 }
 
-.container-custom {
-  background-color: #161514;
-  padding: 1.5rem;
-  text-align: center;
-}
-
 form label {
   text-align: left;
 }
@@ -62,10 +62,13 @@ table .tr-selected td {
   color: #161514;
 }
 
-.btn {
-  color: #161514;
-  background-color: #ffc370;
-  font-family: "Playfair Display", serif;
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+
+hr {
+  border-color: #F3F3F3;
+  opacity: 0.5;
 }
 
 img {
@@ -78,8 +81,31 @@ p {
   text-align: center;
 }
 
-.fine {
-  font-size: small;
+.book-info h5, .book-info p {
+  text-align: left;
+}
+.btn {
+  color: #161514;
+  background-color: #ffc370;
+  font-family: "Playfair Display", serif;
+}
+
+.container-custom {
+  background-color: #161514;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.review .review-description {
+  font-style: italic;
+  text-align: left;
+}
+.review .review-user {
+  font-style: italic;
+  text-align: right;
+}
+.review .review-rating {
+  text-align: right;
 }
 
 footer {

@@ -9,19 +9,15 @@
                         <div class="col-4">
                             <img src="{{ url_for('static',filename='book.png') }}" alt="book">
                         </div>
-                        <div class="pl-4 col-8">
+                        <div class="pl-4 col-8 book-info">
+                            <h5>{{ title }}</h5>
+                            <p>by {{ author }}</p>
                             <div class="row">
-                                <h5>{{ title }}</h5>
-                            </div>
-                            <div class="row">
-                                    <p>by {{ author }}</p>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <p class="my-2 row fine"><b>Publication year:&nbsp</b>{{ year }}</p>
-                                    <p class="my-2 row fine"><b>ISBN:&nbsp</b>{{ isbn }}</p>
-                                    <p class="my-2 row fine"><b>Average Rating:&nbsp</b>{{ average_rating }}</p>
-                                    <p class="my-2 row fine"><b>Total Ratings:&nbsp</b>{{ total_ratings }}</p>
+                                <div class="col book-fine">
+                                    <p><b>Publication year:&nbsp</b>{{ year }}</p>
+                                    <p><b>ISBN:&nbsp</b>{{ isbn }}</p>
+                                    <p><b>Average Rating:&nbsp</b>{{ average_rating }}</p>
+                                    <p><b>Total Ratings:&nbsp</b>{{ total_ratings }}</p>
                                 </div>
                             </div>
                         </div>
@@ -30,7 +26,19 @@
             </div>
             <div class="px-3 pb-3 col-lg-6">
                 <div class="container-custom">
-                    <h5>User Reviews</h5>
+                    <h5>Reader Reviews</h5>
+                    <p>{{ reviews_message }}</p>
+                    {% for review in reviews %}
+                        <hr>
+                        <div class="row">
+                            <div class="col review">
+                                <p class="my-2 review-description">"{{ review['description'] }}"</p>
+                                <p class="my-2 review-user">- {{ review['username'] }}</p>
+                                <p class="my-2 review-rating"><b>Rating:&nbsp</b>{{ review['rating'] }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <hr>
                 </div>
             </div>
         </div>

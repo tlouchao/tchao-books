@@ -24,6 +24,14 @@ $tertiary-color: #4a3d31;
     }
 }
 
+%font-fine {
+    &, p {
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+        font-size: small;
+    }
+}
+
 nav.navbar {
     @extend %primary-font;
     background-color: black;
@@ -48,12 +56,6 @@ main {
     position: relative;
     padding-top: 5rem !important;
     padding-bottom: 1.5rem !important;
-}
-
-.container-custom {
-    background-color: $secondary-color;
-    padding: 1.5rem;
-    text-align: center;
 }
 
 form {
@@ -91,14 +93,14 @@ table {
     }
 }
 
-.btn {
-    color: $secondary-color;
-    background-color: $base-color;
-    font-family: "Playfair Display", serif;
-}
-
 h1, h2, h3, h4, h5, h6 {
     @extend %primary-font;
+    text-align: center;
+}
+
+hr {
+    border-color: $white;
+    opacity: 0.5;
 }
 
 img {
@@ -112,8 +114,40 @@ p {
     text-align: center;
 }
 
-.fine {
-    font-size: small;
+.book-info {
+    h5, p {
+        text-align: left;
+    }
+    .book-fine {
+        @extend %font-fine;
+    }
+}
+
+.btn {
+    color: $secondary-color;
+    background-color: $base-color;
+    font-family: "Playfair Display", serif;
+}
+
+.container-custom {
+    background-color: $secondary-color;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.review {
+    .review-description {
+        font-style: italic;
+        text-align: left;
+    }
+    .review-user {
+        font-style: italic;
+        text-align: right;
+    }   
+    .review-rating {
+        @extend %font-fine;
+        text-align: right;
+    }
 }
 
 footer {
