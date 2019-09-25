@@ -70,7 +70,7 @@ def index():
         search_result = db.execute(search_statement, search_params).fetchall()
         matches = len(search_result)
         items = {k: v[1:-1] for k, v in search_params.items()}
-        # No matches returned
+        # No matches returned if row count == 0
         if matches == 0:
             return render_template("index.html", username=user_result["username"],
                                                  matches=matches,

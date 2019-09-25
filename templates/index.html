@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <div class="custom-container">
-        <h4 class="pb-3">Search</h4>
+    <div class="container-custom">
+        <h4>Search</h4>
         <form method="post" enctype="multipart/form-data">
             <div class="form-group row">
                 <label for="isbn" class="col-md-2 col-form-label">ISBN</label>
@@ -22,12 +22,12 @@
                     <input id="author" name="author" type="text" value='{{ items["author"]}}' class="form-control">
                 </div>
             </div>
-            <button id="submit" type="submit" class="btn">Submit</button>
+            <button type="submit" class="btn">Search</button>
         </form>
     </div>
     <br>
     {% if matches is defined %}
-        <div class="custom-container">
+        <div class="container-custom">
             <p>
                 {{ matches }}
                 {% if matches == 1 %}
@@ -38,28 +38,39 @@
                 returned.
             </p>
             {% if matches != 0 %}
-                <table class="table table-borderless">
-                    <thead>
-                        <tr>
-                        {% for h in headers %}
-                            {% if h == 'isbn' %}
-                                <th scope="col">{{ h.upper() }}</th>
-                            {% else %}
-                                <th scope="col">{{ h.capitalize() }}</th>
-                            {% endif %}
-                        {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for data in result %}
+                <form method="post" enctype="multipart/form-data">
+                    <table class="table table-borderless">
+                        <thead>
                             <tr>
+                                <th scope="col"></th>
                             {% for h in headers %}
-                                <td>{{ data[h] }}</td>
+                                {% if h == 'isbn' %}
+                                    <th scope="col">{{ h.upper() }}</th>
+                                {% else %}
+                                    <th scope="col">{{ h.capitalize() }}</th>
+                                {% endif %}
                             {% endfor %}
                             </tr>
-                        {% endfor %}
-                    <tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {% for data in result %}
+                                <tr id='tr-{{ data["isbn"] }}'>
+                                     <td>
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               id='radio-{{ data["isbn"] }}' 
+                                               name="review" 
+                                               value='{{ data["isbn"] }}'>
+                                     </td>
+                                    {% for h in headers %}
+                                        <td class="table-hover">{{ data[h] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        <tbody>
+                    </table>
+                    <button type="submit" class="btn">Review</button>
+                </form>
             {% endif %}
         </div>
     {% endif %}

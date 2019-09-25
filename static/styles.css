@@ -35,10 +35,20 @@ body {
 
 main {
   padding-top: 5rem !important;
+  padding-bottom: 1.5rem !important;
 }
-main .custom-container {
+
+.container-custom {
   background-color: #161514;
   padding: 1.5rem;
+}
+
+table .form-check-input {
+  margin-left: -0.25rem;
+}
+table tr[id^=tr-]:hover {
+  background-color: #808080;
+  cursor: pointer;
 }
 
 .btn {
@@ -49,6 +59,7 @@ main .custom-container {
 
 h1, h2, h3, h4, h5, h6 {
   text-align: center;
+  padding-bottom: 3rem;
 }
 
 p {
