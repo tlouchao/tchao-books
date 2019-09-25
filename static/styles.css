@@ -25,7 +25,6 @@ nav.navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,195,112, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 nav.navbar #welcome {
-  padding-right: 1rem !important;
   color: #F3F3F3;
 }
 
@@ -34,6 +33,8 @@ body {
 }
 
 main {
+  min-height: 100%;
+  position: relative;
   padding-top: 5rem !important;
   padding-bottom: 1.5rem !important;
 }
@@ -41,8 +42,12 @@ main {
 .container-custom {
   background-color: #161514;
   padding: 1.5rem;
+  text-align: center;
 }
 
+form label {
+  text-align: left;
+}
 table .form-check-input {
   margin-left: -0.25rem;
 }
@@ -63,14 +68,29 @@ table .tr-selected td {
   font-family: "Playfair Display", serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  text-align: center;
-  padding-bottom: 2rem;
+img {
+  display: block;
+  margin: auto;
 }
 
 p {
   background-color: #161514;
   text-align: center;
+}
+
+.fine {
+  font-size: small;
+}
+
+footer {
+  width: 100%;
+  position: absolute;
+  padding-top: 0.5rem;
+  background-color: black;
+  font-size: x-small;
+}
+footer p {
+  background-color: black;
 }
 
 /*# sourceMappingURL=styles.css.map */

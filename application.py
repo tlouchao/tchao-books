@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import Flask, redirect, render_template, request, session, url_for
 from sqlalchemy import create_engine, text
@@ -22,6 +23,8 @@ def after_request(response):
     return response
 
 # Check for environment variables
+if not os.getenv("API_KEY"):
+    raise RuntimeError("API_KEY is not set")
 if not os.getenv("SECRET_KEY"):
     raise RuntimeError("SECRET_KEY is not set")
 if not os.getenv("DATABASE_URL"):
@@ -94,7 +97,27 @@ def search():
 @app.route("/review/<string:isbn>", methods=["GET", "POST"])
 @login_required
 def review(isbn):
-    return render_template("review.html", isbn=isbn)
+    statement = text("SELECT * FROM books WHERE isbn = :isbn")
+    statement = statement.bindparams(isbn=isbn)
+    # Assume that ISBN is unique
+    result = db.execute(statement).first()
+    db.commit()
+    if not result:
+        return error("Book with ISBN: {} does not exist".format(isbn), 403)
+    # Send request to Goodreads API
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", 
+                        params={"key": os.getenv("API_KEY"), "isbns": isbn})
+    if res.status_code == 404:
+        average_rating, total_ratings = "unavailable", "unavailable"
+    else:
+        book = res.json()["books"][0]
+        average_rating, total_ratings = book["average_rating"], book["ratings_count"]
+    return render_template("review.html", isbn=isbn, 
+                                            title=result["title"], 
+                                            author=result["author"],
+                                            year=result["year"],
+                                            average_rating=average_rating,
+                                            total_ratings=total_ratings)
 
 @app.route("/logout", methods=["GET"])
 @login_required

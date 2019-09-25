@@ -35,7 +35,6 @@ nav.navbar {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,195,112, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
     }
     #welcome {
-        padding-right: 1rem !important;
         color: $white;
     }
 }
@@ -45,6 +44,8 @@ body {
 }
 
 main {
+    min-height: 100%;
+    position: relative;
     padding-top: 5rem !important;
     padding-bottom: 1.5rem !important;
 }
@@ -52,11 +53,13 @@ main {
 .container-custom {
     background-color: $secondary-color;
     padding: 1.5rem;
+    text-align: center;
 }
 
 form {
     label {
         @extend %primary-font;
+        text-align: left;
     }
     input {
         @extend %secondary-font;
@@ -96,13 +99,31 @@ table {
 
 h1, h2, h3, h4, h5, h6 {
     @extend %primary-font;
-    text-align: center;
-    padding-bottom: 2rem;
+}
+
+img {
+    display: block;
+    margin: auto;
 }
 
 p {
     @extend %secondary-font;
     background-color: $secondary-color;
     text-align: center;
+}
+
+.fine {
+    font-size: small;
+}
+
+footer {
+    width: 100%;
+    position: absolute;
+    padding-top: .5rem;
+    background-color: black;
+    font-size: x-small;
+    p {
+        background-color: black;
+    }
 }
 
