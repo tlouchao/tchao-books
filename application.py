@@ -47,13 +47,7 @@ create_tables(db)
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # Query database for user
-    # Assume that one entry is returned, since username is unique
-    user_statement = text("SELECT * FROM users WHERE id = :id")
-    user_statement = user_statement.bindparams(id=session["user_id"])
-    user_result = db.execute(user_statement).first()
-    db.commit()
-    if request.method == "POST":
+    if request.method == "POST" and request.form.get("submit") == "search":
         # Build select statement
         search_keys = ["isbn", "title", "author"]
         search_like = []
@@ -65,8 +59,7 @@ def index():
                 search_params[k] = "%{}%".format(request.form.get(k))
         # No matches returned if form fields are empty
         if not search_params:
-                return render_template("index.html", username=user_result["username"], 
-                                                     matches=0,
+                return render_template("index.html", matches=0,
                                                      items={})
         # Execute select statement
         search_statement = text("SELECT * FROM books WHERE " + " AND ".join(search_like))
@@ -76,46 +69,49 @@ def index():
         items = {k: v[1:-1] for k, v in search_params.items()}
         # No matches returned if row count == 0
         if matches == 0:
-            return render_template("index.html", username=user_result["username"],
-                                                 matches=matches,
+            return render_template("index.html", matches=matches,
                                                  items=items)
         # Show table if matches returned
         else:
             headers = search_keys[:]
             headers.append("year")
-            return render_template("index.html", username=user_result["username"],
-                                                 matches=matches,
+            return render_template("index.html", matches=matches,
                                                  items=items,
                                                  headers=headers,
                                                  result=search_result)
-    else:
+    elif request.method == "POST" and request.form.get("submit") == "review":
+        isbn = request.form.get("radio")
+        return redirect('/review/' + isbn)
     # User reached route via GET (as by clicking a link or via redirect)
-        return render_template("index.html", username=user_result["username"], items={})
+    else:
+        return render_template("index.html", items={})
 
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
     return redirect('/')
 
-@app.route("/review", methods=["GET", "POST"])
+@app.route("/review/<string:isbn>", methods=["GET", "POST"])
 @login_required
-def review():
-    return render_template("review.html")
+def review(isbn):
+    return render_template("review.html", isbn=isbn)
 
 @app.route("/logout", methods=["GET"])
 @login_required
 def logout():
 
-    # Forget any user_id
+    # Forget user
     session["user_id"] = None
+    session["user_username"] = None
 
     return redirect('/login')
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-    # Forget any user_id
+    # Forget user
     session["user_id"] = None
+    session["user_username"] = None
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -141,6 +137,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = result["id"]
+        session["user_username"] = result["username"]
 
         # Redirect user to home page
         return redirect("/")
