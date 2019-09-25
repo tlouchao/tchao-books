@@ -67,11 +67,32 @@
                                     {% endfor %}
                                 </tr>
                             {% endfor %}
-                        <tbody>
+                        </tbody>
                     </table>
                     <button type="submit" class="btn">Review</button>
                 </form>
             {% endif %}
         </div>
     {% endif %}
+    {% block javascript %}
+        <script>
+            // Highlight table row on mousedown / click event
+            var trlist = document.querySelectorAll('[id^=tr-]')
+            function highlight() {
+                var _this = this;
+                var i;
+                for (i = 0; i < trlist.length; i++) {
+                    trlist[i].classList.remove("tr-selected");
+                }
+                var radio = document.getElementById("radio-" + _this.id.substring(3));
+                radio.checked = true;
+                _this.classList.add("tr-selected");
+            }
+            var j;
+            for (j = 0; j < trlist.length; j++) {
+                trlist[j].addEventListener("click", highlight);
+                trlist[j].addEventListener("mousedown", highlight);
+            }
+        </script>
+    {% endblock %}
 {% endblock %}

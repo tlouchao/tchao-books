@@ -73,10 +73,17 @@ table {
     .form-check-input {
         margin-left: -.25rem;
     }
-    tr[id^="tr-"] {
+    tr[id^="tr-"]:not(.tr-selected)  {
         &:hover {
             background-color: $grey;
             cursor: pointer;
+        }
+    }
+
+    .tr-selected {
+        background-color: $base-color;
+        td {
+            color: $secondary-color;
         }
     }
 }

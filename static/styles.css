@@ -46,9 +46,15 @@ main {
 table .form-check-input {
   margin-left: -0.25rem;
 }
-table tr[id^=tr-]:hover {
+table tr[id^=tr-]:not(.tr-selected):hover {
   background-color: #808080;
   cursor: pointer;
+}
+table .tr-selected {
+  background-color: #ffc370;
+}
+table .tr-selected td {
+  color: #161514;
 }
 
 .btn {

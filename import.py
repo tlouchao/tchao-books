@@ -6,7 +6,9 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 # Set up database connection
-engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
+engine = create_engine(os.getenv("DATABASE_URL"), 
+                       connect_args={"application_name":"application.py"}, 
+                       echo=True)
 db = scoped_session(sessionmaker(bind=engine))
 
 

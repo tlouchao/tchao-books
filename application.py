@@ -33,7 +33,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
 # Set up database connection
-engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
+engine = create_engine(os.getenv("DATABASE_URL"), 
+                       connect_args={"application_name": "application.py"}, 
+                       echo=True)
 db = scoped_session(sessionmaker(bind=engine))
 
 # Create tables if not exists
@@ -50,6 +52,7 @@ def index():
     user_statement = text("SELECT * FROM users WHERE id = :id")
     user_statement = user_statement.bindparams(id=session["user_id"])
     user_result = db.execute(user_statement).first()
+    db.commit()
     if request.method == "POST":
         # Build select statement
         search_keys = ["isbn", "title", "author"]
@@ -68,6 +71,7 @@ def index():
         # Execute select statement
         search_statement = text("SELECT * FROM books WHERE " + " AND ".join(search_like))
         search_result = db.execute(search_statement, search_params).fetchall()
+        db.commit()
         matches = len(search_result)
         items = {k: v[1:-1] for k, v in search_params.items()}
         # No matches returned if row count == 0
@@ -129,6 +133,7 @@ def login():
         statement = text("SELECT * FROM users WHERE username = :username")
         statement = statement.bindparams(username=request.form.get("username"))
         result = db.execute(statement).first()
+        db.commit()
 
         # Ensure username exists and password is correct
         if not result or not check_password_hash(result["hash"], request.form.get("password")):
@@ -168,6 +173,7 @@ def register():
         statement = text("SELECT * FROM users WHERE username = :username")
         statement = statement.bindparams(username=request.form.get("username"))
         result = db.execute(statement).first()
+        db.commit()
 
         # Ensure username is available
         if result:

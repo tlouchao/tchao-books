@@ -31,6 +31,7 @@ def create_tables(db):
                                          "description VARCHAR(1023), " + 
                                          "PRIMARY KEY (user_id, book_id));")
         db.commit()
+    db.commit()
 
 # Error handler
 def error(description, code):
