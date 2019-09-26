@@ -1,8 +1,9 @@
-import string
 import os
 import requests
+import string
 
-from flask import Flask, redirect, render_template, request, session, url_for
+from collections import OrderedDict
+from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -35,6 +36,7 @@ if not os.getenv("DATABASE_URL"):
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config['JSON_SORT_KEYS'] = False
 
 # Set up database connection
 engine = create_engine(os.getenv("DATABASE_URL"), 
@@ -50,6 +52,40 @@ create_tables(db)
 # TODO: Optional: Handle search routing with query parameters
 
 # Routing
+
+@app.route("/api/<string:isbn>", methods=["GET"])
+def isbn(isbn):
+
+    # Select book from database
+    book_statement = text("SELECT isbn, title, author, year FROM books WHERE isbn = :isbn")
+    book_statement = book_statement.bindparams(isbn=isbn)
+
+    # Assume that ISBN is unique
+    book_result = db.execute(book_statement).first()
+    db.commit()
+    if not book_result:
+        return error("Book with ISBN: {} does not exist".format(isbn), 403)
+
+    # Create temporary table
+    temp_statement = text("CREATE TABLE temp AS " +
+                          "SELECT reviews.rating FROM books JOIN reviews ON (books.id = reviews.book_id) " +
+                          "WHERE isbn = :isbn")
+    temp_statement = temp_statement.bindparams(isbn=isbn)
+    temp_result = db.execute(temp_statement)
+    
+    # Get book info
+    isbn_columns = {k: v for k, v in book_result.items()}
+    isbn_count = db.execute("SELECT COUNT(*) FROM temp;").first()
+    isbn_avg = db.execute("SELECT AVG(rating) FROM temp;").first()
+    db.execute("DROP TABLE temp;")
+    db.commit()
+    
+    # Return JSON object
+    res = OrderedDict({k: v for k, v in isbn_columns.items()})
+    res["review_count"] = isbn_count["count"]
+    res["average_score"] = "{0:.2f}".format(isbn_avg["avg"]) if isbn_avg["avg"] else None
+    return jsonify(res)
+
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
