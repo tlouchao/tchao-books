@@ -1,3 +1,4 @@
+import string
 import os
 import requests
 
@@ -45,6 +46,8 @@ db = scoped_session(sessionmaker(bind=engine))
 create_tables(db)
 
 # NOTE: Run import.py to populate books table
+# TODO: Add timestamp column to reviews table
+# TODO: Optional: Handle search routing with query parameters
 
 # Routing
 @app.route("/", methods=["GET", "POST"])
@@ -90,12 +93,12 @@ def index():
             return redirect('/review/' + isbn)
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("index.html", items={})
+        return render_template("index.html", items={}, alert=request.args.get("alert"))
 
 @app.route("/search", methods=["GET", "POST"])
 @login_required
 def search():
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route("/review/<string:isbn>", methods=["GET", "POST"])
 @login_required
@@ -118,7 +121,16 @@ def review(isbn):
         if not request.form.get("rating"):
             return error('Please select a rating', 400)
 
-        # TODO: Check if review already exists
+        # Check if review already exists
+        exists_statement = text("SELECT COUNT(*) FROM reviews WHERE user_id = :user_id and book_id = :book_id")
+        exists_statement = exists_statement.bindparams(user_id=session["user_id"], book_id=book_result["id"])
+        exists_result = db.execute(exists_statement).first()
+        db.commit()
+
+        if exists_result["count"] == 1:
+            return error('Review already submitted for this book', 403)
+
+        # Submit review if not exists
         review_statement = text("INSERT INTO reviews(user_id, book_id, rating, description) " + 
                                 "VALUES(:user_id, :book_id, :rating, :description)")
         review_statement = review_statement.bindparams(user_id=session["user_id"], 
@@ -127,8 +139,7 @@ def review(isbn):
                                                        description=request.form.get("review"))
         review_result = db.execute(review_statement)
         db.commit()
-        print('SUCCESS')
-        return redirect('/')
+        return redirect(url_for('index', alert="Success!"))
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -157,13 +168,13 @@ def review(isbn):
         
         # Display page
         return render_template("review.html", isbn=isbn, 
-                                            title=book_result["title"], 
-                                            author=book_result["author"],
-                                            year=book_result["year"],
-                                            average_rating=average_rating,
-                                            total_ratings=total_ratings,
-                                            reviews_message=reviews_message,
-                                            reviews=reviews_result)
+                                              title=book_result["title"], 
+                                              author=book_result["author"],
+                                              year=book_result["year"],
+                                              average_rating=average_rating,
+                                              total_ratings=total_ratings,
+                                              reviews_message=reviews_message,
+                                              reviews=reviews_result)
 
 @app.route("/logout", methods=["GET"])
 @login_required
@@ -173,7 +184,7 @@ def logout():
     session["user_id"] = None
     session["user_username"] = None
 
-    return redirect('/login')
+    return redirect(url_for('login'))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -209,11 +220,11 @@ def login():
         session["user_username"] = result["username"]
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect(url_for('index'))
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        return render_template("login.html", alert=request.args.get("alert"))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -234,6 +245,15 @@ def register():
         if request.form.get("password") != request.form.get("confirmation"):
             return error("password and confirmation do not match", 400)
 
+        # Ensure that username contains alphanumeric characters
+        if not request.form.get("username").isalnum():
+            return error("username must contain alphanumeric characters", 403)
+
+        # Ensure that password does not contains whitespace
+        for p in request.form.get("password"):
+            if p in string.whitespace:
+                return error("password cannot contain whitespace", 403)
+
         # Query database for user
         # Assume that one entry is returned, since username is unique
         statement = text("SELECT * FROM users WHERE username = :username")
@@ -253,7 +273,7 @@ def register():
         db.commit()
 
         # Redirect user to login page
-        return redirect("/login")
+        return redirect(url_for('login', alert="Success!"))
     else:
         # User reached route via GET (as by clicking a link or via redirect)
         return render_template("register.html")

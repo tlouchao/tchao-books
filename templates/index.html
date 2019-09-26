@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 
 {% block main %}
+    {% if alert %}
+    <div class="alert alert-success text-center" role="alert">
+        {{ alert }}
+    </div>
+    {% endif %}
     <div class="container-custom">
         <form method="post" enctype="multipart/form-data">
             <h4>Search</h4>

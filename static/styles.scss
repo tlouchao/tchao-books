@@ -49,13 +49,10 @@ nav.navbar {
 
 body {
     background-color: $tertiary_color;
-}
-
-main {
-    min-height: 100%;
     position: relative;
+    min-height: 100vh;
     padding-top: 5rem !important;
-    padding-bottom: 1.5rem !important;
+    padding-bottom: 5rem !important;
 }
 
 form {
@@ -162,9 +159,11 @@ p {
 }
 
 footer {
-    width: 100%;
     position: absolute;
+    bottom: 0;
     padding-top: .5rem;
+    padding-bottom: .5rem;
+    width: 100%;
     background-color: black;
     font-size: x-small;
     p {
