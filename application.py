@@ -111,39 +111,59 @@ def review(isbn):
     if not book_result:
         return error("Book with ISBN: {} does not exist".format(isbn), 403)
 
-    # Select reviews of this book from database
-    reviews_statement = text("select username, rating, description FROM users " + 
-                             "JOIN (SELECT * FROM books JOIN reviews ON (books.id = reviews.book_id) " +
-                             "WHERE books.id = :id) AS books_reviews ON (users.id = books_reviews.user_id)")
-    reviews_statement = reviews_statement.bindparams(id=book_result["id"])
-    reviews_result = db.execute(reviews_statement).fetchall()
-    db.commit()
+    # Handle form submission
+    if request.method == 'POST':
+        if not request.form.get("review"):
+            return error('Please submit a review', 400)
+        if not request.form.get("rating"):
+            return error('Please select a rating', 400)
 
-    if len(reviews_result) == 0:
-        reviews_message = "There doesn't seem to be anything here."
-    else:
-        reviews_message = "See what other readers have to say about {} :)".format(book_result["title"])
+        # TODO: Check if review already exists
+        review_statement = text("INSERT INTO reviews(user_id, book_id, rating, description) " + 
+                                "VALUES(:user_id, :book_id, :rating, :description)")
+        review_statement = review_statement.bindparams(user_id=session["user_id"], 
+                                                       book_id=book_result["id"],
+                                                       rating=request.form.get("rating"),
+                                                       description=request.form.get("review"))
+        review_result = db.execute(review_statement)
+        db.commit()
+        print('SUCCESS')
+        return redirect('/')
 
-    # Send request to Goodreads API
-    res = requests.get("https://www.goodreads.com/book/review_counts.json", \
-                        params={"key": os.getenv("API_KEY"), "isbns": isbn})
-    if res.status_code == 404:
-        average_rating, total_ratings = "unavailable", "unavailable"
+    # User reached route via GET (as by clicking a link or via redirect)
     else:
-        book_json = res.json()["books"][0]
-        average_rating, total_ratings = book_json["average_rating"], book_json["ratings_count"]
-    for row in reviews_result:
-        print(row)
-    
-    # Display page
-    return render_template("review.html", isbn=isbn, 
-                                          title=book_result["title"], 
-                                          author=book_result["author"],
-                                          year=book_result["year"],
-                                          average_rating=average_rating,
-                                          total_ratings=total_ratings,
-                                          reviews_message=reviews_message,
-                                          reviews=reviews_result)
+
+        # Select reviews of this book from database
+        reviews_statement = text("select username, rating, description FROM users " + 
+                                "JOIN (SELECT * FROM books JOIN reviews ON (books.id = reviews.book_id) " +
+                                "WHERE books.id = :id) AS books_reviews ON (users.id = books_reviews.user_id)")
+        reviews_statement = reviews_statement.bindparams(id=book_result["id"])
+        reviews_result = db.execute(reviews_statement).fetchall()
+        db.commit()
+
+        if len(reviews_result) == 0:
+            reviews_message = "There doesn't seem to be anything here."
+        else:
+            reviews_message = "See what other readers have to say about {} :)".format(book_result["title"])
+
+        # Send request to Goodreads API
+        res = requests.get("https://www.goodreads.com/book/review_counts.json", \
+                            params={"key": os.getenv("API_KEY"), "isbns": isbn})
+        if res.status_code == 404:
+            average_rating, total_ratings = "unavailable", "unavailable"
+        else:
+            book_json = res.json()["books"][0]
+            average_rating, total_ratings = book_json["average_rating"], book_json["ratings_count"]
+        
+        # Display page
+        return render_template("review.html", isbn=isbn, 
+                                            title=book_result["title"], 
+                                            author=book_result["author"],
+                                            year=book_result["year"],
+                                            average_rating=average_rating,
+                                            total_ratings=total_ratings,
+                                            reviews_message=reviews_message,
+                                            reviews=reviews_result)
 
 @app.route("/logout", methods=["GET"])
 @login_required

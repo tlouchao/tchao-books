@@ -1,8 +1,8 @@
-h1, h2, h3, h4, h5, h6, table th, form label, nav.navbar {
+h1, h2, h3, h4, h5, h6, table th, form label, form .ratings, nav.navbar {
   color: #ffc370;
   font-family: "Playfair Display", serif;
 }
-h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link, table th a:link, form label a:link, nav.navbar a:link, h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited, table th a:visited, form label a:visited, nav.navbar a:visited {
+h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link, table th a:link, form label a:link, form .ratings a:link, nav.navbar a:link, h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited, table th a:visited, form label a:visited, form .ratings a:visited, nav.navbar a:visited {
   color: #ffc370;
 }
 
@@ -14,7 +14,7 @@ p a:link, table td a:link, form input a:link, p a:visited, table td a:visited, f
   color: #F3F3F3;
 }
 
-.review .review-rating, .book-info .book-fine, .review .review-rating p, .book-info .book-fine p {
+#review-remaining, .review .review-rating, .book-info .book-fine, #review-remaining p, .review .review-rating p, .book-info .book-fine p {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   font-size: small;
@@ -45,7 +45,10 @@ main {
   padding-bottom: 1.5rem !important;
 }
 
-form label {
+form h1, form h2, form h3, form h4, form h5, form h6 {
+  padding-bottom: 0.5rem;
+}
+form label, form .ratings {
   text-align: left;
 }
 table .form-check-input {
@@ -81,6 +84,11 @@ p {
   text-align: center;
 }
 
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .book-info {
+    padding-left: 2rem;
+  }
+}
 .book-info h5, .book-info p {
   text-align: left;
 }
@@ -106,6 +114,10 @@ p {
 }
 .review .review-rating {
   text-align: right;
+}
+
+#review-remaining {
+  text-align: left;
 }
 
 footer {

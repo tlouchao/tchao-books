@@ -2,8 +2,8 @@
 
 {% block main %}
     <div class="container-custom">
-        <h4 class=pb-2>Search</h4>
         <form method="post" enctype="multipart/form-data">
+            <h4>Search</h4>
             <div class="form-group row">
                 <label for="isbn" class="col-md-2 col-form-label">ISBN</label>
                 <div class="col-md-10">
@@ -43,7 +43,7 @@
                         <thead>
                             <tr>
                                 <th scope="col"></th>
-                            {% for h in headers %}
+                            {% for h in headers -%}
                                 {% if h == 'isbn' %}
                                     <th scope="col">{{ h.upper() }}</th>
                                 {% else %}
@@ -53,7 +53,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for data in result %}
+                            {% for data in result -%}
                                 <tr id='tr-{{ data["isbn"] }}'>
                                      <td>
                                         <input class="form-check-input"
@@ -62,7 +62,7 @@
                                                name="radio"
                                                value='{{ data["isbn"] }}'>
                                      </td>
-                                    {% for h in headers %}
+                                    {% for h in headers -%}
                                         <td class="table-hover">{{ data[h] }}</td>
                                     {% endfor %}
                                 </tr>

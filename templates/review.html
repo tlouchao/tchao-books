@@ -3,43 +3,87 @@
 {% block main %}
     <div class="p-0 container">
         <div class="row">
-            <div class="px-3 pb-3 col-lg-6">
-                <div class="container-custom">
-                    <div class="row">
-                        <div class="col-4">
-                            <img src="{{ url_for('static',filename='book.png') }}" alt="book">
-                        </div>
-                        <div class="pl-4 col-8 book-info">
-                            <h5>{{ title }}</h5>
-                            <p>by {{ author }}</p>
+            <div class="px-3 pb-3 col-md-6">
+                <div class="row">
+                    <div class="pb-3 col">
+                        <div class="container-custom">
                             <div class="row">
-                                <div class="col book-fine">
-                                    <p><b>Publication year:&nbsp</b>{{ year }}</p>
-                                    <p><b>ISBN:&nbsp</b>{{ isbn }}</p>
-                                    <p><b>Average Rating:&nbsp</b>{{ average_rating }}</p>
-                                    <p><b>Total Ratings:&nbsp</b>{{ total_ratings }}</p>
+                                <div class="col-4">
+                                    <img src="{{ url_for('static',filename='book.png') }}" alt="book">
+                                </div>
+                                <div class="col-8 book-info">
+                                    <h5>{{ title }}</h5>
+                                    <p>by {{ author }}</p>
+                                    <div class="row">
+                                        <div class="col book-fine">
+                                            <p><b>Publication year:&nbsp</b>{{ year }}</p>
+                                            <p><b>ISBN:&nbsp</b>{{ isbn }}</p>
+                                            <p><b>Average Rating:&nbsp</b>{{ average_rating }}</p>
+                                            <p><b>Total Ratings:&nbsp</b>{{ total_ratings }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="container-custom">
+                            <form method="post" enctype="multipart/form-data">
+                                <h5>Your Review</h5>
+                                <div class="form-group">
+                                    <textarea class="form-control" 
+                                              id="review-textarea" 
+                                              name="review"
+                                              rows="5" 
+                                              maxlength=1023 
+                                              placeholder="Submit your review here."></textarea>
+                                    <p id="review-remaining">Characters remaining: 1023</p>
+                                </div>
+                                {% set radios = [1,2,3,4,5] %}
+                                <div class="form-group ratings">
+                                    <label class="pr-2" for="ratings">Rating</label>
+                                {% for r in radios %}
+                                    <div class="form-check form-check-inline" id="ratings">
+                                        <input class="form-check-input" type="radio" name="rating" value='{{ r }}' id='rating-{{ r }}'>
+                                        <label class="form-check-label" for='rating-{{ r }}'>{{ r }}</label>
+                                    </div>
+                                {% endfor %}
+                                </div>
+                                <button class="btn" type="submit">Submit Review</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="px-3 pb-3 col-lg-6">
+            <div class="px-3 pb-3 col-md-6">
                 <div class="container-custom">
                     <h5>Reader Reviews</h5>
                     <p>{{ reviews_message }}</p>
-                    {% for review in reviews %}
-                        <hr>
-                        <div class="row">
-                            <div class="col review">
-                                <p class="my-2 review-description">"{{ review['description'] }}"</p>
-                                <p class="my-2 review-user">- {{ review['username'] }}</p>
-                                <p class="my-2 review-rating"><b>Rating:&nbsp</b>{{ review['rating'] }}</p>
+                    {% if reviews %}
+                        {% for review in reviews -%}
+                            <hr>
+                            <div class="row">
+                                <div class="col review">
+                                    <p class="my-2 review-description">"{{ review['description'] }}"</p>
+                                    <p class="my-2 review-user">- {{ review['username'] }}</p>
+                                    <p class="my-2 review-rating"><b>Rating:&nbsp</b>{{ review['rating'] }}</p>
+                                </div>
                             </div>
-                        </div>
-                    {% endfor %}
-                    <hr>
+                        {% endfor %}
+                        <hr>
+                    {% endif %}
                 </div>
             </div>
         </div>
+    {% block javascript %}
+        <script>
+            const textarea = document.getElementById('review-textarea');
+            const remaining = document.getElementById('review-remaining');
+            textarea.addEventListener("keyup", function() {
+                remaining.innerHTML = "Characters remaining: " + (1023 - this.value.length);
+            });
+        </script>
+    {% endblock %}
 {% endblock %}

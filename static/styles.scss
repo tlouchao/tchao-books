@@ -59,7 +59,10 @@ main {
 }
 
 form {
-    label {
+    h1, h2, h3, h4, h5, h6 {
+        padding-bottom: .5rem;
+    }
+    label, .ratings {
         @extend %primary-font;
         text-align: left;
     }
@@ -115,6 +118,9 @@ p {
 }
 
 .book-info {
+    @media screen and (min-width:768px) and (max-width: 991px) {
+        padding-left: 2rem;
+    }
     h5, p {
         text-align: left;
     }
@@ -148,6 +154,11 @@ p {
         @extend %font-fine;
         text-align: right;
     }
+}
+
+#review-remaining {
+    @extend %font-fine;
+    text-align: left;
 }
 
 footer {
