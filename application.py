@@ -40,8 +40,7 @@ app.config['JSON_SORT_KEYS'] = False
 
 # Set up database connection
 engine = create_engine(os.getenv("DATABASE_URL"), 
-                       connect_args={"application_name": "application.py"}, 
-                       echo=True)
+                       connect_args={"application_name": "application.py", "sslmode":"require"})
 db = scoped_session(sessionmaker(bind=engine))
 
 # Create tables if not exists
@@ -79,7 +78,7 @@ def isbn(isbn):
     isbn_avg = db.execute("SELECT AVG(rating) FROM temp;").first()
     db.execute("DROP TABLE temp;")
     db.commit()
-    
+
     # Return JSON object
     res = OrderedDict({k: v for k, v in isbn_columns.items()})
     res["review_count"] = isbn_count["count"]
