@@ -1,6 +1,6 @@
 # Project 1
 
-Web app that allows users to register, login and then search & review books.
+Web app that allows users to login with credentials and review books.
 
 ## Setup
 run `git clone --branch web50/projects/2019/x/1 https://github.com/me50/tlouchao.git`      
@@ -10,7 +10,7 @@ set environment variable `SECRET_KEY` to a random string (EX: import os module, 
 set environment variable `DATABASE_URL` to database URI credential provided by Heroku  
 set environment variable `API_KEY` to GoodReads API key  
 run `flask run` to start the application  
-run `import.py` to import book data into database  
+run `python3 import.py` to import book data into database  
 
 ## Summary
 
@@ -28,7 +28,7 @@ Select a book and press the "Review" button to navigate to that book's webpage.
 Submit a review of this book and give this book a rating from 1-5. View reviews and ratings from other users.  
 
 ### API Access
-Send a GET request to the web app's `/api/<isbn>` route, where `<isbn>` is an ISBN number, to retrieve a JSON response:  
+Send a GET request to the web app's `/api/<isbn>` route, where `<isbn>` is an ISBN number, in order to retrieve a JSON response:  
 
 ```
 {
