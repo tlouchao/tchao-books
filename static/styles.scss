@@ -1,0 +1,173 @@
+$white: #F3F3F3;
+$grey: #808080;
+$base-color: #ffc370;
+$secondary-color: #161514;
+$tertiary-color: #4a3d31;
+
+%primary-font {
+    color: $base-color;
+    font-family: "Playfair Display", serif;
+    a {
+        &:link, &:visited {
+            color: $base-color;
+        }
+    }
+}
+
+%secondary-font {
+    color: $white;
+    font-family: "Lato", sans-serif;;
+    a {
+        &:link, &:visited {
+            color: $white;
+        }
+    }
+}
+
+%font-fine {
+    &, p {
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+        font-size: small;
+    }
+}
+
+nav.navbar {
+    @extend %primary-font;
+    background-color: black;
+    font-weight: bold;
+    .navbar-toggler {
+        border-color: $base-color;
+    }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,195,112, 0.75)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    }
+    #welcome {
+        color: $white;
+    }
+}
+
+body {
+    background-color: $tertiary_color;
+    position: relative;
+    min-height: 100vh;
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+}
+
+form {
+    h1, h2, h3, h4, h5, h6 {
+        padding-bottom: .5rem;
+    }
+    label, .ratings {
+        @extend %primary-font;
+        text-align: left;
+    }
+    input {
+        @extend %secondary-font;
+    }
+}
+
+table {
+    th {
+        @extend %primary-font;
+    }
+    td {
+        @extend %secondary-font;
+    }
+    .form-check-input {
+        margin-left: -.25rem;
+    }
+    tr[id^="tr-"]:not(.tr-selected)  {
+        &:hover {
+            background-color: $grey;
+            cursor: pointer;
+        }
+    }
+
+    .tr-selected {
+        background-color: $base-color;
+        td {
+            color: $secondary-color;
+        }
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @extend %primary-font;
+    text-align: center;
+}
+
+hr {
+    border-color: $white;
+    opacity: 0.5;
+}
+
+img {
+    display: block;
+    margin: auto;
+}
+
+p {
+    @extend %secondary-font;
+    background-color: $secondary-color;
+    text-align: center;
+}
+
+.book-info {
+    @media screen and (min-width:768px) and (max-width: 991px) {
+        padding-left: 2rem;
+    }
+    h5, p {
+        text-align: left;
+    }
+    .book-fine {
+        @extend %font-fine;
+    }
+}
+
+.btn {
+    color: $secondary-color;
+    background-color: $base-color;
+    font-family: "Playfair Display", serif;
+}
+
+.container-custom {
+    background-color: $secondary-color;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.review {
+    .review-description {
+        font-style: italic;
+        text-align: left;
+    }
+    .review-user {
+        font-style: italic;
+        text-align: right;
+    }   
+    .review-rating {
+        @extend %font-fine;
+        text-align: right;
+    }
+}
+
+#review-remaining {
+    @extend %font-fine;
+    text-align: left;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    width: 100%;
+    background-color: black;
+    font-size: x-small;
+    p {
+        background-color: black;
+    }
+}
+

@@ -1,9 +1,102 @@
 {% extends "layout.html" %}
 
-{% block title %}
-    Search
-{% endblock %}
-
 {% block main %}
-    <p>Search</p>
+    {% if alert %}
+    <div class="alert alert-success text-center" role="alert">
+        {{ alert }}
+    </div>
+    {% endif %}
+    <div class="container-custom">
+        <form method="post" enctype="multipart/form-data">
+            <h4>Search</h4>
+            <div class="form-group row">
+                <label for="isbn" class="col-md-2 col-form-label">ISBN</label>
+                <div class="col-md-10">
+                    <input id="isbn" name="isbn" type="text" value='{{ items["isbn"]}}' class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="title" class="col-md-2 col-form-label">Title</label>
+                <div class="col-md-10">
+                    <input id="title" name="title" type="text" value='{{ items["title"]}}' class="form-control">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="author" class="col-md-2 col-form-label">Author</label>
+                <div class="col-md-10">
+                    <input id="author" name="author" type="text" value='{{ items["author"]}}' class="form-control">
+                </div>
+            </div>
+            <button class="btn" type="submit" name="submit" value="search">Search</button>
+        </form>
+    </div>
+    <br>
+    {% if matches is defined %}
+        <div class="container-custom">
+            <p>
+                {{ matches }}
+                {% if matches == 1 %}
+                    &nbspmatch&nbsp
+                {% else %}
+                    &nbspmatches&nbsp
+                {% endif %}
+                returned.
+            </p>
+            {% if matches != 0 %}
+                <form method="post" enctype="multipart/form-data">
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                            {% for h in headers -%}
+                                {% if h == 'isbn' %}
+                                    <th scope="col">{{ h.upper() }}</th>
+                                {% else %}
+                                    <th scope="col">{{ h.capitalize() }}</th>
+                                {% endif %}
+                            {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in result -%}
+                                <tr id='tr-{{ data["isbn"] }}'>
+                                     <td>
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               id='radio-{{ data["isbn"] }}' 
+                                               name="radio"
+                                               value='{{ data["isbn"] }}'>
+                                     </td>
+                                    {% for h in headers -%}
+                                        <td class="table-hover">{{ data[h] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button class="btn" type="submit" name="submit" value="review">Review</button>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+    {% block javascript %}
+        <script>
+            // Highlight table row on mousedown / click event
+            var trlist = document.querySelectorAll('[id^=tr-]')
+            var trselected;
+            function highlight() {
+                var _this = this;
+                var radio = document.getElementById("radio-" + _this.id.substring(3));
+                radio.checked = true;
+                trselected != null && trselected.classList.remove("tr-selected");
+                _this.classList.add("tr-selected");
+                trselected = _this;
+            }
+            var i;
+            for (i = 0; i < trlist.length; i++) {
+                trlist[i].addEventListener("click", highlight);
+                trlist[i].addEventListener("mousedown", highlight);
+            }
+        </script>
+    {% endblock %}
 {% endblock %}
