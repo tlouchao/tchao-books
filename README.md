@@ -1,9 +1,11 @@
 # Project 1
 
 Web app that allows users to login with credentials and review books.
+Visit https://tchao-books.herokuapp.com/ to view the web app.
+NOTE: Do NOT use a real password as this web app does not enforce a minimum character count.  
 
 ## Setup
-run `git clone --branch web50/projects/2019/x/1 https://github.com/me50/tlouchao.git`      
+run `git clone https://github.com/tlouchao/tchao-books.git`      
 run `pip install -r requirements.txt` . 
 set environment variable `FLASK_APP` to `application.py`  
 set environment variable `SECRET_KEY` to a random string (EX: import os module, then run `os.urandom(12).hex()`)  
@@ -16,8 +18,7 @@ run `python3 import.py` to import book data into database
 
 ### Register & Login
 Create a username/password pair and login with your credentials. Username should only contain alphanumeric characters.  
-
-NOTE: Do NOT use a real password as this web app does not enforce a minimum character count.  
+NOTE: Do NOT use a real password.
 
 ### Search
 Enter an ISBN number, book title, and/or book author. If at least one field is provided a list of books will be returned   which match the criteria. Matching is case-insensitive and a partial ISBN, title, and/or author is acceptable.      
