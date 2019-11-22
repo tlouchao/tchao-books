@@ -1,7 +1,6 @@
 # Project 1
 
-Web app that allows users to login with credentials and review books.
-Visit https://tchao-books.herokuapp.com/ to view the web app.
+Web app that allows users to login with credentials and review books at https://tchao-books.herokuapp.com/.  
 NOTE: Do NOT use a real password as this web app does not enforce a minimum character count.  
 
 ## Setup
@@ -18,7 +17,6 @@ run `python3 import.py` to import book data into database
 
 ### Register & Login
 Create a username/password pair and login with your credentials. Username should only contain alphanumeric characters.  
-NOTE: Do NOT use a real password.
 
 ### Search
 Enter an ISBN number, book title, and/or book author. If at least one field is provided a list of books will be returned   which match the criteria. Matching is case-insensitive and a partial ISBN, title, and/or author is acceptable.      
